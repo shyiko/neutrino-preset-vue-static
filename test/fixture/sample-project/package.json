@@ -1,0 +1,27 @@
+{
+  "name": "sample-project",
+  "description": "",
+  "version": "0.1.0",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "start": "http-server -c-1 build",
+    "dev": "neutrino start --use neutrino-preset-vue-static",
+    "build": "neutrino build --use neutrino-preset-vue-static",
+    "lint": "standard --plugin html '**/*.{js,vue}'",
+    "lint-fix": "standard --fix --plugin html '**/*.{js,vue}'"
+  },
+  "devDependencies": {
+    "eslint-plugin-html": "^2.0.0",
+    "http-server": "^0.9.0",
+    "standard": "^8.6.0",
+    "neutrino": "^5.4.0",
+    "vue": "^2.1.10",
+    "vue-document": "^0.1.0"
+  },
+  "private": true
+}

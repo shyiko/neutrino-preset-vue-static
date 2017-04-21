@@ -1,0 +1,16 @@
+environment:
+  nodejs_version: "7" # for --harmony-async-await
+
+install:
+  - ps: Install-Product node $env:node_version
+  - yarn install
+
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+
+cache:
+ - "%LOCALAPPDATA%\\Yarn"
+
+build: off

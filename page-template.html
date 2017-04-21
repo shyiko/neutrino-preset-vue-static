@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <%= htmlWebpackPlugin.files.css.map((file) =>
+  `<link href="/${file}">`
+  ).join('') %>
+</head>
+<body>
+<div id="app"></div>
+<!-- uncomment line below if you use require.ensure(...) -->
+<!--
+<% if (compilation.assets['manifest.json']) { %>
+<script>window.webpackManifest = <%= compilation.assets['manifest.json'].source() %></script>
+<% } %>
+-->
+<!-- window.__INITIAL_STATE__ -->
+<%= htmlWebpackPlugin.files.js.map((file) =>
+`<script src="/${file}"></script>`
+).join('') %>
+</body>
+</html>
