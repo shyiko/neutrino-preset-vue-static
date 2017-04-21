@@ -76,7 +76,7 @@ vendor.f73c3e88b161.js.map     434 kB       1  [emitted]  vendor
 By default `neutrino-preset-vue-static` is looking for `src/**/*.vue` (this can 
 be changed by modifying `neutrino.options.source` (`./src`) and `neutrino.options.vue-static.sourceGlob` (`**/*.vue`) config options in your 
 `package.json` (as shown at the end of this section)). As part of the build all generated assets together with
-`./static/**` (`neutrino.options.vue-static.staticSource`) get copied to `./build` (`neutrino.options.output`).
+`./public/**` (`neutrino.options.vue-static.staticSource`) get copied to `./build` (`neutrino.options.output`).
 
 Below are the configuration options specific to `neutrino-preset-vue-static`:
 
