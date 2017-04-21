@@ -18,7 +18,6 @@
 <script>window.webpackManifest = <%= compilation.assets['manifest.json'].source() %></script>
 <% } %>
 -->
-<!-- window.__INITIAL_STATE__ -->
 <%= htmlWebpackPlugin.files.js.map((file) =>
 `<script src="/${file}"></script>`
 ).join('') %>

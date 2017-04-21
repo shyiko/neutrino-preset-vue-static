@@ -338,10 +338,6 @@ module.exports = (neutrino) => {
                   onDocumentReady(document)
                   result = document.outerHTML
                 }
-                if (context.state) {
-                  result = result.replace('<!-- window.__INITIAL_STATE__ -->',
-                    `<script>window.__INITIAL_STATE__ = ${JSON.stringify(context.state)}</script>`)
-                }
                 if (minify) {
                   result = htmlMinifier.minify(result, htmlMinifierConfig)
                 }

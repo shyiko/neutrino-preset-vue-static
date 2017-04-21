@@ -3,10 +3,18 @@ import App from '<%= entry %>'
 
 export default function (context) {
   var app = new Vue(App)
-  // vue-document (if in use): inject document metadata
-  var documentMetadata = app.$document
-  if (documentMetadata) {
-    context.onDocumentReady = app.$documentForceUpdate.bind(app)
+  var initialState
+  context.onDocumentReady = function (document) {
+    // inject vuex initial state (if any)
+    if (initialState) {
+      var script = document.createElement('script')
+      script.appendChild(document.createTextNode(
+        'window.__INITIAL_STATE__ = ' + JSON.stringify(initialState)))
+      const el = document.getElementById('app')
+      el.parentNode.insertBefore(script, el.nextSibling)
+    }
+    // vue-document (if in use): inject document metadata
+    app.$documentForceUpdate && app.$documentForceUpdate(document)
   }
   // vue-router (if in use): navigate to context.url
   var router = app.$router
@@ -29,7 +37,7 @@ export default function (context) {
           ).then(function () {
               // state to be injected as window.__INITIAL_STATE__
               // dehydrated in client-entry.js
-            context.state = store.state
+            initialState = store.state
             resolve(app)
           })
             .catch(reject)
