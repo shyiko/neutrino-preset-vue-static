@@ -1,4 +1,4 @@
-# neutrino-preset-vue-static [![AppVeyor](https://img.shields.io/appveyor/ci/shyiko/neutrino-preset-vue-static.svg)]() [![npm](https://img.shields.io/npm/v/neutrino-preset-vue-static.svg)]()
+# neutrino-preset-vue-static [![AppVeyor](https://img.shields.io/appveyor/ci/shyiko/neutrino-preset-vue-static.svg)]() [![npm](https://img.shields.io/npm/v/neutrino-preset-vue-static.svg)](https://www.npmjs.com/package/neutrino-preset-vue-static)
 
 A minimalistic starter kit for building static sites using [Vue.js](https://vuejs.org/) (powered by [Neutrino](https://neutrino.js.org/)).  
 Node.js 6+.
