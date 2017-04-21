@@ -336,7 +336,7 @@ module.exports = (neutrino) => {
                   const window = dom.createWindow(result)
                   const document = window.document
                   onDocumentReady(document)
-                  result = document.documentElement.outerHTML
+                  result = document.outerHTML
                 }
                 if (context.state) {
                   result = result.replace('<!-- window.__INITIAL_STATE__ -->',
