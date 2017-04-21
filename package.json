@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/shyiko/neutrino-preset-vue-static"
   },
+  "main": "neutrino-preset.js",
   "scripts": {
     "lint": "standard *.js test/*.js",
     "lint-fix": "standard --fix *.js test/*.js",
