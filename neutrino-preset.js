@@ -18,6 +18,9 @@ const trimSlash = (str) => str.match(/^\/*(.*?)\/*$/)[1]
 const requirable = (module) => {
   try { require.resolve(module); return true } catch (e) { return false }
 }
+const attempt = (op, success, fail) => {
+  let v; try { v = op() } catch (e) { return fail && fail(e) } return success(v)
+}
 
 const {
   DefinePlugin,
@@ -66,6 +69,14 @@ module.exports = (neutrino) => {
     minify = Object.keys(minifyDef)
       .reduce((r, k) => { r[k] = minify; return r }, {})
   }
+
+  minify.js && attempt(
+    () => require('neutrino-middleware-minify'),
+    (middleware) => {
+      minify.js = false // suppress uglifyjs in favour of babili
+      neutrino.use(middleware)
+    }
+  )
 
   const {
     staticSource = 'public',
