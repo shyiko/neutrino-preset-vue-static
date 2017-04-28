@@ -140,7 +140,7 @@ module.exports = (neutrino) => {
     // https://webpack.js.org/guides/hmr-react/
     // how about your own webpack/hot/dev-server that groups messages?
     config.entry(page.chunkName)
-      .when(!!hmr, (set) => set
+      .when(!!hmr && process.env.NODE_ENV !== 'production', (set) => set
         .add(hmr.entry)
         .add('webpack-dev-server/client?http://0.0.0.0:' + port)
       )
