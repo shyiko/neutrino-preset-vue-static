@@ -19,7 +19,12 @@ const requirable = (module) => {
   try { require.resolve(module); return true } catch (e) { return false }
 }
 
-const {DefinePlugin, optimize: {UglifyJsPlugin}} = webpack
+const {
+  DefinePlugin,
+  optimize: {UglifyJsPlugin},
+  HotModuleReplacementPlugin,
+  NamedModulesPlugin
+} = webpack
 
 // https://github.com/kangax/html-minifier#options-quick-reference
 const htmlMinifierConfigDef = {
@@ -46,7 +51,7 @@ module.exports = (neutrino) => {
   const {
     config,
     options: {
-      root, source, output, 'vue-static': preset = {}
+      root, source, output, 'vue-static': preset = {}, config: userConfig = {}
     }
   } = neutrino
 
@@ -66,7 +71,12 @@ module.exports = (neutrino) => {
     htmlMinifierConfig = htmlMinifierConfigDef,
     emitSourceMapsOnBuild = true,
     minify = true,
-    serverConfig = {}
+    serverConfig = {},
+    hmr = {
+      // the other option - webpack/hot/dev-server
+      // "only-" means "to only hot reload for successful updates"
+      entry: 'webpack/hot/only-dev-server'
+    }
   } = preset
 
   function writeEntrySync (templatePath, template, pageName) {
@@ -88,7 +98,8 @@ module.exports = (neutrino) => {
   const cacheDir = path.join(root, '.cache', 'vue-static')
   mkdirpSync(cacheDir)
 
-  const staticDirExists = staticSource && fs.existsSync(path.join(root, staticSource))
+  const staticDirExists = staticSource &&
+    fs.existsSync(path.join(root, staticSource))
 
   const htmlWebpackPluginDef = {
     template: path.isAbsolute(pageTemplate)
@@ -119,12 +130,21 @@ module.exports = (neutrino) => {
     'utf8'
   )
 
+  const port = (userConfig.devServer || {}).port || 5000
+
   // each page gets generated entry.js (using entryTemplate)
   // (in simplest case entry just mounts App to #app)
   pages.forEach((page) => {
     const entryPath = path.join(cacheDir, page.chunkName + '.js')
     writeEntrySync(entryPath, entry, page.name)
-    config.entry(page.chunkName).add(entryPath)
+    // https://webpack.js.org/guides/hmr-react/
+    // how about your own webpack/hot/dev-server that groups messages?
+    config.entry(page.chunkName)
+      .when(!!hmr, (set) => set
+        .add(hmr.entry)
+        .add('webpack-dev-server/client?http://0.0.0.0:' + port)
+      )
+      .add(entryPath)
   })
 
   config.output
@@ -362,6 +382,15 @@ module.exports = (neutrino) => {
     config
       .plugin('vue-server-renderer')
       .use(VueServerRendererPlugin)
+  } else
+  if (hmr) {
+    config
+      .plugin('hmr')
+      .use(HotModuleReplacementPlugin)
+    // print more readable module names in the browser console on HMR updates
+    config
+      .plugin('named-modules')
+      .use(NamedModulesPlugin)
   }
 
   if (vendorBundle) {
@@ -381,6 +410,7 @@ module.exports = (neutrino) => {
     .extensions.add('*').add('.js').add('.vue')
 
   config.devServer
+    .hot(!!hmr)
     .noInfo(true)
     .when(staticDirExists,
       (config) => config.contentBase(path.join(root, staticSource)))
