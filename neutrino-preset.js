@@ -15,6 +15,9 @@ const htmlMinifier = require('html-minifier')
 const createBundleRenderer = require('vue-server-renderer').createBundleRenderer
 const dom = require('domino')
 const trimSlash = (str) => str.match(/^\/*(.*?)\/*$/)[1]
+const requirable = (module) => {
+  try { require.resolve(module); return true } catch (e) { return false }
+}
 
 const {DefinePlugin, optimize: {UglifyJsPlugin}} = webpack
 
@@ -151,12 +154,17 @@ module.exports = (neutrino) => {
         }
       }))
 
-  config.module
-    .rule('load-js')
-    .test(/\.js$/)
-    .exclude.add(/node_modules(?!\/.cache)/).end()
-    .use('babel')
-    .loader('babel-loader')
+  // same order as in vue-loader/lib/loader.js
+  const loaderForJS = ['buble-loader', 'babel-loader'].find(requirable)
+
+  if (loaderForJS) {
+    config.module
+      .rule('load-js')
+      .test(/\.js$/)
+      .exclude.add(/node_modules(?!\/.cache)/).end()
+      .use(loaderForJS)
+      .loader(loaderForJS)
+  }
 
   // generate html for each page
   pages.forEach((page) => {
@@ -272,12 +280,14 @@ module.exports = (neutrino) => {
             .use('vue')
             .loader('vue-loader')
 
-          config.module
-            .rule('load-js')
-            .test(/\.js$/)
-            .exclude.add(/node_modules(?!\/.cache)/).end()
-            .use('babel')
-            .loader('babel-loader')
+          if (loaderForJS) {
+            config.module
+              .rule('load-js')
+              .test(/\.js$/)
+              .exclude.add(/node_modules(?!\/.cache)/).end()
+              .use(loaderForJS)
+              .loader(loaderForJS)
+          }
 
           // https://www.npmjs.com/package/vue-server-renderer#externals-caveats
           config.externals(Object.keys(pkg.dependencies || {})
