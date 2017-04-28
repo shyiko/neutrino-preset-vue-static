@@ -55,10 +55,17 @@ module.exports = (neutrino) => {
     }
   } = neutrino
 
+  const minifyDef = {js: true, css: true, html: true}
+
   let {
-    sourceGlob = ['index.vue']
+    sourceGlob = ['index.vue'],
+    minify = minifyDef
   } = preset
   Array.isArray(sourceGlob) || (sourceGlob = [].concat(sourceGlob))
+  if (typeof minify === 'boolean') {
+    minify = Object.keys(minifyDef)
+      .reduce((r, k) => { r[k] = minify; return r }, {})
+  }
 
   const {
     staticSource = 'public',
@@ -74,7 +81,6 @@ module.exports = (neutrino) => {
     runtimeOnly = true,
     htmlMinifierConfig = htmlMinifierConfigDef,
     emitSourceMapsOnBuild = true,
-    minify = true,
     serverConfig = {},
     hmr = {
       // the other option - webpack/hot/dev-server
@@ -172,7 +178,7 @@ module.exports = (neutrino) => {
             fallback: 'vue-style-loader',
             use: 'css-loader?' + [
               emitSourceMapsOnBuild && 'sourceMap',
-              minify && 'minimize'
+              minify.css && 'minimize'
             ].filter(Boolean).join('&')
           })
         }
@@ -244,7 +250,7 @@ module.exports = (neutrino) => {
           context: path.join(root, staticSource),
           from: '**/*.html',
           to: '.',
-          transform: (content) => minify
+          transform: (content) => minify.html
             ? htmlMinifier.minify(content.toString(), htmlMinifierConfig)
             : content
         }]])
@@ -258,7 +264,7 @@ module.exports = (neutrino) => {
       .plugin('extract-text')
       .use(ExtractTextPlugin, ['[name].[contenthash:12].css'])
 
-    if (minify) {
+    if (minify.js) {
       config
         .plugin('uglify-js')
         .use(UglifyJsPlugin, [{sourceMap: true, compress: {warnings: false}}])
@@ -372,7 +378,7 @@ module.exports = (neutrino) => {
                   onDocumentReady(document)
                   result = document.outerHTML
                 }
-                if (minify) {
+                if (minify.html) {
                   result = htmlMinifier.minify(result, htmlMinifierConfig)
                 }
                 htmlPluginData.html = result.replace(injectionPlaceholder, str)
