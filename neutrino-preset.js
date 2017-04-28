@@ -411,6 +411,7 @@ module.exports = (neutrino) => {
 
   config.devServer
     .hot(!!hmr)
+    .overlay(true)
     .noInfo(true)
     .when(staticDirExists,
       (config) => config.contentBase(path.join(root, staticSource)))
