@@ -1,7 +1,7 @@
 {
   "name": "neutrino-preset-vue-static",
   "description": "A minimalistic starter kit for building static sites using Vue.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Stanley Shyiko <stanley.shyiko@gmail.com>",
   "license": "MIT",
   "repository": {
