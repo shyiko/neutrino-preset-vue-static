@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <%= htmlWebpackPlugin.files.css.map((file) =>
-  `<link href="/${file}">`
+  `<link href="/${file}" rel="stylesheet">`
   ).join('') %>
 </head>
 <body>
