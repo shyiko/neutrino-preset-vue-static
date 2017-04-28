@@ -55,8 +55,12 @@ module.exports = (neutrino) => {
     }
   } = neutrino
 
+  let {
+    sourceGlob = ['index.vue']
+  } = preset
+  Array.isArray(sourceGlob) || (sourceGlob = [].concat(sourceGlob))
+
   const {
-    sourceGlob = ['**/*.vue'],
     staticSource = 'public',
     // {[entry: string]: Array<{path: string, output: string}>}
     routes = {},

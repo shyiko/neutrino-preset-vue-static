@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Automatic detection of `buble-loader` & `babel-loader` (for `*.js`) (to be consistent with `vue-loader`).  
 
 ### Changed
+- `neutrino.options.vue-static.sourceGlob` to `["index.vue"]` by default.
 - `babel`'s scope to optional (`babel-*` were removed
  from `dependencies` list).
 - `devServer.overlay` to true by default.
