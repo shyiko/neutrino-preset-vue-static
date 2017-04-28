@@ -23,5 +23,12 @@
     "vue": "^2.1.10",
     "vue-document": "^0.1.0"
   },
+  "neutrino": {
+    "options": {
+      "vue-static": {
+        "sourceGlob": ["**/*.vue"]
+      }
+    }
+  },
   "private": true
 }
