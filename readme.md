@@ -105,7 +105,7 @@ Below are the configuration options specific to `neutrino-preset-vue-static`:
 
 > package.json
 
-```
+```json5
 {
   "neutrino": {
     "options": {
