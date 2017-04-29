@@ -16,7 +16,7 @@ serve your app with whatever you want, be it nginx, [caddy](https://caddyserver.
 
 ## Getting Started
 
-```
+```sh
 npm init -y
 npm install --save-dev neutrino neutrino-preset-vue-static vue
 
@@ -28,7 +28,7 @@ npm install --save-dev buble-loader
 
 Update `package.json` to include: 
 
-```
+```json
 {
   "scripts": {
     "start": "neutrino start --use neutrino-preset-vue-static",
